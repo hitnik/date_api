@@ -1,8 +1,12 @@
 from flask import Flask
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Api
+from api import Date
 
 app = Flask(__name__)
 
+api = Api(app)
+
+api.add_resource(Date, '/parse-date/')
 
 @app.route('/')
 def hello_world():
