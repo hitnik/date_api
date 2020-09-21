@@ -2,7 +2,7 @@ from flask import Blueprint
 from  flask_restful import reqparse
 v1_bp = Blueprint('v1', __name__)
 
-@v1_bp.route('parse-date',  methods=['POST'])
+@v1_bp.route('parse-date',  methods=['GET', 'POST'])
 def date_parser():
     parser = reqparse.RequestParser(bundle_errors=True)
     parser.add_argument('text',
