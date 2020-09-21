@@ -4,7 +4,11 @@ Flask==1.1.2
 Flask-RESTful==0.3.8
 itsdangerous==1.1.0
 Jinja2==2.11.2
+joblib==0.16.0
 MarkupSafe==1.1.1
+nltk==3.5
 pytz==2020.1
+regex==2020.7.14
 six==1.15.0
+tqdm==4.49.0
 Werkzeug==1.0.1
