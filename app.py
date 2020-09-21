@@ -1,16 +1,9 @@
 from flask import Flask
-from flask_restful import Api
-from api import Date
+from v1 import v1_bp
 
 app = Flask(__name__)
-
-api = Api(app)
-
-api.add_resource(Date, '/parse-date/')
-
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
+app.config['BUNDLE_ERRORS'] = True
+app.register_blueprint(v1_bp, url_prefix='/v1')
 
 
 if __name__ == '__main__':
