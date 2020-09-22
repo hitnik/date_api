@@ -17,8 +17,10 @@ def date_parser():
     month_bag = bag.months_bag
     days_bag = bag.days_bag
 
-    if sum(month_bag)+sum(days_bag) == 0 :
-        return {'Error': 'impossible to determine the date'}, 400
+    if sum(month_bag)+sum(days_bag) == 0:
+        return {'date_start': None, 'date_end':None}, 200
+
+
     response = {
         'ok': True
     }

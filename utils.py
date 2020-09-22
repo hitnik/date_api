@@ -6,6 +6,7 @@ from nltk.util import ngrams
 import joblib
 import pandas as pd
 from flask import current_app
+from os import path
 
 MONTHS_GEN = {
     1: "января",
@@ -72,7 +73,8 @@ class BagOfWords():
     def _sentence_to_bagofwords(self):
         bag = []
         d = {}
-        with open('{}/words_bag.csv'.format(current_app.instance_path), encoding='utf-8', newline='') as csvfile:
+        with open(path.join(current_app.root_path, 'data', 'words_bag.csv'),
+                  encoding='utf-8', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 item = row['bag']
@@ -108,7 +110,8 @@ class BagOfWords():
     def days_bag(self):
         d = self._bag_dict
         days_dict = {}
-        with open('./data/weather_data_days.csv', encoding='utf-8', newline='') as csvfile:
+        with open(path.join(current_app.root_path, 'data', 'weather_data_days.csv'),
+                  encoding='utf-8', newline='') as csvfile:
             reader = csv.reader(csvfile)
             row_names = next(reader)
             row_names.remove('day_start')
