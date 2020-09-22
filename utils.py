@@ -5,8 +5,7 @@ from nltk.corpus import stopwords
 from nltk.util import ngrams
 import joblib
 import pandas as pd
-from os import path
-
+from flask import current_app
 
 MONTHS_GEN = {
     1: "января",
@@ -73,14 +72,12 @@ class BagOfWords():
     def _sentence_to_bagofwords(self):
         bag = []
         d = {}
-        with open('words_bag.csv', encoding='utf-8', newline='') as csvfile:
+        with open('{}/words_bag.csv'.format(current_app.instance_path), encoding='utf-8', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 item = row['bag']
                 bag.append(str(item))
-
         self._primary_clearing()
-
         words = nltk.word_tokenize(self._sentence)
         cleared_words = clear_words(words)
         bigrams = ngrams(cleared_words, 2)

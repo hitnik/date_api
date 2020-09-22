@@ -13,7 +13,12 @@ def date_parser():
                         )
     parser.parse_args()
     params = parser.parse_args()
-    print(params)
+    bag = BagOfWords(params['text'])
+    month_bag = bag.months_bag
+    days_bag = bag.days_bag
+
+    if sum(month_bag)+sum(days_bag) == 0 :
+        return {'Error': 'impossible to determine the date'}, 400
     response = {
         'ok': True
     }
