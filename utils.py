@@ -5,7 +5,7 @@ from nltk.corpus import stopwords
 from nltk.util import ngrams
 from flask import current_app
 from os import path
-from app import  pipeline_month, pipeline_day_start, pipeline_day_end
+from app import pipeline_month, pipeline_day_start, pipeline_day_end
 import datetime
 
 MONTHS_GEN = {
