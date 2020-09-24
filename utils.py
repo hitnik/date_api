@@ -3,7 +3,6 @@ import csv
 import nltk
 from nltk.corpus import stopwords
 from nltk.util import ngrams
-import joblib
 from flask import current_app
 from os import path
 from app import  pipeline_month, pipeline_day_start, pipeline_day_end
@@ -131,9 +130,6 @@ class BagOfWords():
         return list(days_dict.values())
 
 
-#read pipeline from file
-def load_pipeline(filepath):
-    return joblib.load(filepath)
 
 def predict_date(month_bag, days_bag):
     """
@@ -147,8 +143,8 @@ def predict_date(month_bag, days_bag):
     else:
         month = pipeline_month.predict([month_bag])
         day_start = pipeline_day_start.predict([days_bag])
-        day_end = pipeline_day_start.predict([days_bag])
+        day_end = pipeline_day_end.predict([days_bag])
         year = datetime.date.today().year
-        date_start = datetime.date(year, month, day_start)
-        date_end = datetime.date(year, month, day_end)
+        date_start = datetime.date(year, int(month), int(day_start))
+        date_end = datetime.date(year, int(month), int(day_end))
         return date_start, date_end

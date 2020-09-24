@@ -1,6 +1,7 @@
 from flask import Flask
 from v1 import v1_bp
-from utils import load_pipeline
+from pipelines.utils import load_pipeline
+
 
 from os import path
 
@@ -13,6 +14,8 @@ pipeline_day_start = load_pipeline((path.join(app.root_path,
                                           'pipelines', 'day_start_pipeline.pkl.gz')))
 pipeline_day_end = load_pipeline((path.join(app.root_path,
                                           'pipelines', 'day_end_pipeline.pkl.gz')))
+
+
 
 app.register_blueprint(v1_bp, url_prefix='/v1')
 
