@@ -4,9 +4,10 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.util import ngrams
 import joblib
-import pandas as pd
 from flask import current_app
 from os import path
+from app import  pipeline_month, pipeline_day_start, pipeline_day_end
+import datetime
 
 MONTHS_GEN = {
     1: "января",
@@ -22,6 +23,15 @@ MONTHS_GEN = {
     11: "ноября",
     12: "декабря"
 }
+
+DAYS = ['4', '30', '29', '31', '13-14', '21', '25', '7-8', '12-13',
+        '18-19', '23-24', '29-30', '10', '28', '2-3', '17', '7', '26',
+        '15-16', '9-10', '1', '19-20', '22-23', '26-27', '11-12', '3',
+        '12', '18', '15', '8-9', '21-22', '27', '25-26', '6-7', '22',
+        '4-5', '20', '11', '17-18', '20-21', '5', '16-17', '23', '5-6',
+        '14', '24', '24-25', '10-11', '9', '30-31', '1-2', '2', '28-29',
+        '14-15' , '27-28', '13', '6', '8', '19', '16', '3-4'
+        ]
 
 def clear_words(words):
     stop_words = stopwords.words('russian')
@@ -110,14 +120,7 @@ class BagOfWords():
     def days_bag(self):
         d = self._bag_dict
         days_dict = {}
-        with open(path.join(current_app.root_path, 'data', 'weather_data_days.csv'),
-                  encoding='utf-8', newline='') as csvfile:
-            reader = csv.reader(csvfile)
-            row_names = next(reader)
-            row_names.remove('day_start')
-            row_names.remove('day_end')
-            row_names.remove('text')
-        for item in row_names:
+        for item in DAYS:
             days_dict[item] = 0
         for name, value in d.items():
             for k,v in days_dict.items():
@@ -128,20 +131,24 @@ class BagOfWords():
         return list(days_dict.values())
 
 
-#Save the pipeline
-def save_pipeline(filepath, pipeline_to_persist) -> None:
-    joblib.dump(pipeline_to_persist, filepath)
-
 #read pipeline from file
 def load_pipeline(filepath):
     return joblib.load(filepath)
 
-def read_data(filepath):
-    return pd.read_csv(filepath)
-
-def split_data(data, exlude_columns, predict_column):
-
-    X = data.drop(exlude_columns, axis=1)
-    y = data[predict_column].astype('int64')
-
-    return X, y
+def predict_date(month_bag, days_bag):
+    """
+    predict date start and date and by month_bag and days_bag
+    :param month_bag:
+    :param days_bag:
+    :return: date_start, date_end
+    """
+    if sum(month_bag)+sum(days_bag) == 0:
+        return None, None
+    else:
+        month = pipeline_month.predict([month_bag])
+        day_start = pipeline_day_start.predict([days_bag])
+        day_end = pipeline_day_start.predict([days_bag])
+        year = datetime.date.today().year
+        date_start = datetime.date(year, month, day_start)
+        date_end = datetime.date(year, month, day_end)
+        return date_start, date_end
