@@ -19,7 +19,7 @@ class BasicTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 405)
 
     def test_data(self):
-        with open((path.join(app.root_path, '', 'test_data.csv')), encoding='utf-8', newline='') as csvfile:
+        with open((path.join(app.root_path, '', 'data/test_data.csv')), encoding='utf-8', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 text = row['text']

@@ -133,7 +133,7 @@ class BagOfWords():
 
 
 
-def predict_date(month_bag, days_bag):
+def predict_date(month_bag, days_bag, text):
     """
     predict date start and date and by month_bag and days_bag
     :param month_bag:
@@ -149,6 +149,10 @@ def predict_date(month_bag, days_bag):
         year = datetime.date.today().year
         date_start = datetime.date(year, int(month), int(day_start))
         date_end = datetime.date(year, int(month), int(day_end))
+        with open(path.join(current_app.root_path, 'data', 'test_data.csv'),
+                  'a', encoding='utf-8', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow([text, int(month), int(day_start), int(day_end)])
         return date_start, date_end
 
 v1_bp = Blueprint('v1', __name__)
@@ -166,7 +170,7 @@ def date_parser():
     bag = BagOfWords(params['text'])
     month_bag = bag.months_bag
     days_bag = bag.days_bag
-    date_start, date_end = predict_date(month_bag, days_bag)
+    date_start, date_end = predict_date(month_bag, days_bag, params['text'])
     response = {
         'start': date_start,
         'end': date_end
