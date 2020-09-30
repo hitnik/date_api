@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, send_file
 v1_bp = Blueprint('v1', __name__)
 from flask_restful import reqparse
 import re
@@ -176,3 +176,15 @@ def date_parser():
         'end': date_end
     }
     return response, 200
+
+@v1_bp.route('trained-sample', methods=['GET'])
+def trained_sample():
+    filepath = path.join(current_app.root_path, 'data', 'test_data.csv')
+    try:
+        return send_file(filepath,as_attachment=True,
+                         attachment_filename='trained_sample.csv',  mimetype='text/csv')
+    except FileNotFoundError:
+        response = {
+            'Error': 'File not found'
+        }
+        return response, 404
